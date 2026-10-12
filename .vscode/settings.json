@@ -14,9 +14,6 @@
     "Lua.workspace.library": [
         "~\\.vscode\\extensions\\ketho.wow-api-0.22.3\\Annotations\\Core"
     ],
-        "Lua.diagnostics.disable": [
-        "assign-type-mismatch"
-    ],
     "Lua.diagnostics.globals": [
         "CalendarFrame",
         "CANCEL",
@@ -25,22 +22,15 @@
         "DONE",
         "FlightMapFrame",
         "FlightMapMixin",
-        "GameTooltip",
         "GameTooltip_AddNormalLine",
         "GameTooltip_SetTitle",
         "MapCanvasDataProviderMixin",
         "MapCanvasPinMixin",
-        "message",
+        "MapPinEnhanced",
         "StaticPopup_Show",
-        "StaticPopup_ShowCustomGenericInputBox",
-        "StaticPopup_StandardEditBoxOnEscapePressed",
-        "StaticPopup_StandardNonEmptyTextHandler",
         "StaticPopupDialogs",
-        "UNKNOWN",
-        "UserEditBoxNonEmpty",
+        "TomTom",
         "WorldMapFrame",
-        "WorldMapMixin",
-        "WOW_PROJECT_ID",
-        "WOW_PROJECT_MAINLINE"
+        "WorldMapMixin"
     ]
 }

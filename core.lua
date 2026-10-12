@@ -33,7 +33,7 @@
 
 ---@class CandyBucketsMapPosition : CandyBucketsMapCanvas
 ---@field public name string
----@field public quest? CandyBucketsQuest
+---@field public quest CandyBucketsQuest
 ---@field public GetPosition fun(): x: number, y: number
 ---@field public SetPosition fun(self: CandyBucketsMapPosition, x: number, y: number)
 
@@ -59,17 +59,17 @@
 ---@field public Text FontString
 
 ---@class CandyBucketsEvalPositionQuestInfo
----@field public module? CandyBucketsModule
----@field public quest? CandyBucketsEvalPositionQuestInfo
----@field public side? number `1` = Alliance, `2` = Horde, `3` = Neutral
+---@field public module CandyBucketsModule
+---@field public quest CandyBucketsEvalPositionQuestInfo
+---@field public side number `1` = Alliance, `2` = Horde, `3` = Neutral
 ---@field public missing? boolean
 ---@field public error? string
 ---@field public warning? string
 ---@field public success? string
 ---@field public name? string
----@field public uiMapID? number
----@field public x? number
----@field public y? number
+---@field public uiMapID number
+---@field public x number
+---@field public y number
 ---@field public distance? number
 
 ---@class CandyBucketsEvalPositionRetInfo
@@ -309,8 +309,11 @@ do
 	local tomtomWaypointAddon = {
 		name = "TomTom",
 		func = function(self, poi, wholeModule)
+			if not poi.quest.module then
+				return false
+			end
 			---@type TomTomWaypointPolyfill
-			local TomTom = TomTom ---@diagnostic disable-line: undefined-global
+			local TomTom = TomTom
 			if wholeModule then
 				self:funcAll(poi.quest.module)
 				TomTom:SetClosestWaypoint()
@@ -333,7 +336,7 @@ do
 		end,
 		funcAll = function(self, module)
 			---@type TomTomWaypointPolyfill
-			local TomTom = TomTom ---@diagnostic disable-line: undefined-global
+			local TomTom = TomTom
 			for i = 1, #ns.QUESTS do
 				local quest = ns.QUESTS[i]
 				if quest.module == module and quest.waypoint ~= false then
@@ -358,7 +361,7 @@ do
 		end,
 		funcRemove = function(self, questID)
 			---@type TomTomWaypointPolyfill
-			local TomTom = TomTom ---@diagnostic disable-line: undefined-global
+			local TomTom = TomTom
 			local remove ---@type table<TomTomWaypointOptionsPolyfill, true>?
 			for _, mapWaypoints in pairs(TomTom.waypoints) do
 				for _, waypoint in pairs(mapWaypoints) do
@@ -380,7 +383,7 @@ do
 		end,
 		funcClosest = function(self)
 			---@type TomTomWaypointPolyfill
-			local TomTom = TomTom ---@diagnostic disable-line: undefined-global
+			local TomTom = TomTom
 			local waypoint = TomTom:GetClosestWaypoint()
 			if not waypoint then
 				return false
@@ -405,12 +408,15 @@ do
 	local mpeWaypointAddon = {
 		name = "MapPinEnhanced",
 		func = function(self, poi, wholeModule)
+			if not poi.quest.module then
+				return false
+			end
 			if wholeModule then
 				self:funcAll(poi.quest.module)
 				return true
 			end
 			---@type MapPinEnhancedPolyfill
-			local MapPinEnhanced = MapPinEnhanced ---@diagnostic disable-line: undefined-global
+			local MapPinEnhanced = MapPinEnhanced
 			local uiMapID = poi:GetMap():GetMapID()
 			local x, y = poi:GetPosition()
 			local childUiMapID, childX, childY = GetLowestLevelMapFromMapID(uiMapID, x, y)
@@ -426,7 +432,7 @@ do
 		end,
 		funcAll = function(self, module)
 			---@type MapPinEnhancedPolyfill
-			local MapPinEnhanced = MapPinEnhanced ---@diagnostic disable-line: undefined-global
+			local MapPinEnhanced = MapPinEnhanced
 			for i = 1, #ns.QUESTS do
 				local quest = ns.QUESTS[i]
 				if quest.module == module and quest.waypoint ~= false then
@@ -458,6 +464,9 @@ do
 			return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 		end,
 		func = function(self, poi, wholeModule)
+			if not poi.quest.module then
+				return false
+			end
 			if wholeModule then
 				self:funcAll(poi.quest.module)
 				return true
@@ -708,7 +717,7 @@ local PIN_BORDER_COLOR = {
 }
 
 ---@class CandyBucketsPin
----@field public quest? any
+---@field public quest CandyBucketsQuest
 ---@field public name? string
 ---@field public description? string
 
@@ -746,6 +755,9 @@ end
 ---@param isTaxiMap boolean
 function CandyBucketsPinMixin:OnAcquired(quest, poi, isTaxiMap)
 	self.quest = quest
+	if not quest.module then
+		return
+	end
 	local map = self:GetMap()
 	self:UseFrameLevelType("PIN_FRAME_LEVEL_CANDY_BUCKET_ICON", map:GetNumActivePinsByTemplate("CandyBucketsPinTemplate"))
 	self:SetSize(12, 12)
@@ -788,7 +800,9 @@ function CandyBucketsPinMixin:OnMouseEnter()
 	if self.description and self.description ~= "" then
 		GameTooltip_AddNormalLine(GameTooltip, self.description, true)
 	end
-	GameTooltip_AddNormalLine(GameTooltip, format("Quest ID: %s", self.quest.quest), false)
+	if self.quest then
+		GameTooltip_AddNormalLine(GameTooltip, format("Quest ID: %s", self.quest.quest), false)
+	end
 	if ns:GetWaypointAddon() then
 		GameTooltip_AddNormalLine(GameTooltip, "<Click to show waypoint.>", false)
 	end
@@ -1013,7 +1027,7 @@ function addon:UnloadModule(name)
 	for i = #ns.QUESTS, 1, -1 do
 		local quest = ns.QUESTS[i]
 
-		if quest.module.event == name then
+		if quest.module and quest.module.event == name then
 			table.remove(ns.QUESTS, i)
 		end
 	end
@@ -1042,7 +1056,7 @@ function addon:CheckCalendar()
 		local isSecret = issecretvalue(event.calendarType)
 		numSecrets = numSecrets + (isSecret and 1 or 0)
 
-		if event and (not isSecret) and event.calendarType == "HOLIDAY" then
+		if event and (not isSecret) and event.calendarType == "HOLIDAY" and event.iconTexture then
 			local ongoing = event.sequenceType == "ONGOING" -- or event.sequenceType == "INFO"
 			local moduleName = MODULE_FROM_TEXTURE[event.iconTexture]
 
@@ -1227,15 +1241,15 @@ function addon:IsDeliveryLocationExpected(questID)
 				local warnDistanceForMap = mapScale > 0 and mapScale or 0.05 -- we convert the actual map size into the same scale as we use for the distance - fallback to 0.05 if we're missing data
 
 				if distance > warnDistanceForMap then
-					ret.has, ret.success, ret.data = true, false, { quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = distance }
+					ret.has, ret.success, ret.data = true, false, { module = quest.module, side = quest.side, quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = distance }
 				elseif DEBUG_LOCATION then
-					ret.has, ret.success, ret.data = true, true, { success = "Player turned in quest at an acceptable distance.", quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = distance }
+					ret.has, ret.success, ret.data = true, true, { module = quest.module, side = quest.side, success = "Player turned in quest at an acceptable distance.", quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = distance }
 				else
 					ret.has, ret.success = true, true
 				end
 
 			elseif not quest.missing then
-				ret.has, ret.success, ret.data = true, false, { quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = 1 }
+				ret.has, ret.success, ret.data = true, false, { module = quest.module, side = quest.side, quest = quest, uiMapID = uiMapID, x = pos.x, y = pos.y, distance = 1 }
 			end
 		until true
 	end
