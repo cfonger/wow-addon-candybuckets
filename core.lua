@@ -1,7 +1,3 @@
--- if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE then
--- 	return
--- end
-
 ---@alias CandyBucketsModuleName "brewfest"|"hallow"|"lunar"|"midsummer"
 
 ---@class CandyBucketsNS : table
@@ -210,6 +206,7 @@ do
 	AddParentChildMapIDs(525, 590) -- Frostfire Ridge -> Frostwall
 	AddParentChildMapIDs(1978, 2151) -- Dragon Isles -> The Forbidden Reach
 	AddParentChildMapIDs(947, 2151) -- Azeroth -> The Forbidden Reach
+	AddParentChildMapIDs(2405, 2444) -- Voidstorm -> Slayer's Rise
 
 end
 
