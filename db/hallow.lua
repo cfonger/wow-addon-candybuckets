@@ -8,13 +8,15 @@ ns.modules["hallow"] = {
 		[1] = "Interface\\Icons\\Achievement_Halloween_Candy_01",
 		[2] = "Interface\\Icons\\Spell_Shadow_Teleport",
 		[3] = "Interface\\Icons\\Achievement_Halloween_Candy_01",
-		[4] = "Interface\\GossipFrame\\GossipGossipIcon"
+		[4] = "Interface\\GossipFrame\\GossipGossipIcon",
+		[5] = "Interface\\Icons\\Spell_Shadow_Teleport"
 	},
 	title = {
 		[1] = "Candy Bucket",
 		[2] = "Candy Bucket (Phased)",
 		[3] = "Candy Bucket (Requires Reputation)",
-		[4] = "Zidormi (Change Phase)"
+		[4] = "Zidormi (Change Phase)",
+		[5] = "Candy Bucket (Instance)"
 	},
 	quests = {
 		{ quest = 12349, side = 1, [70] = {66.60, 45.30} },
@@ -299,6 +301,23 @@ ns.modules["hallow"] = {
 		{ quest = 84569, side = 3, [2214] = {43.74, 32.09} },
 		{ quest = 84570, side = 3, [2214] = {59.26, 78.98} },
 		{ quest = 84571, side = 3, [2214] = {57.70, 46.22} },
+		{ quest = 97142, side = 3, [2393] = {55.81, 69.77} },
+		{ quest = 97213, side = 3, [2541] = {63.13, 71.15} },
+		{ quest = 97213, side = 3, extra = 5, [2393] = {56.43, 70.82} },
+		{ quest = 97143, side = 3, [2395] = {46.42, 46.06} },
+		{ quest = 97148, side = 3, [2395] = {48.98, 68.53} },
+		{ quest = 97150, side = 3, [2437] = {45.30, 65.15} },
+		{ quest = 97152, side = 3, [2437] = {36.86, 23.43} },
+		{ quest = 97151, side = 3, [2437] = {46.55, 25.86} },
+		{ quest = 97209, side = 3, [2405] = {41.74, 74.65} },
+		{ quest = 97210, side = 3, [2405] = {35.67, 58.58} },
+		{ quest = 97212, side = 2, [2444] = {21.33, 55.37} },
+		{ quest = 97212, side = 1, [2444] = {75.95, 77.59} },
+		{ quest = 97206, side = 3, [2576] = {64.98, 63.81} },
+		{ quest = 97155, side = 3, [2413] = {69.05, 51.73} },
+		{ quest = 97154, side = 3, [2413] = {66.13, 24.52} },
+		{ quest = 97208, side = 3, [2413] = {35.05, 22.81} },
+		{ quest = 97207, side = 3, [2413] = {30.90, 65.02} },
 	},
 	patterns = {
 		"^%s*[Cc][Aa][Nn][Dd][Yy]%s+[Bb][Uu][Cc][Kk][Ee][Tt]%s*$",

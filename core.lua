@@ -7,13 +7,14 @@
 ---@class CandyBucketsNS : table
 ---@field public modules table<CandyBucketsModuleName, CandyBucketsModule>
 
----@class CandyBucketsQuest : table
+---@class CandyBucketsQuest
 ---@field public quest number
 ---@field public side number `1` = Alliance, `2` = Horde, `3` = Neutral
 ---@field public extra? number
 ---@field public style? number `1` = Circle (Default), `2` = No Border and Plain Icon
 ---@field public waypoint? boolean
 ---@field public module? CandyBucketsModule
+---@field public [number] number[] Example `[1000] = { 12.34, 56.78 }`
 
 ---@class CandyBucketsModule
 ---@field public event CandyBucketsModuleName
@@ -1217,7 +1218,7 @@ function addon:IsDeliveryLocationExpected(questID)
 
 		repeat
 			if type(qpos) == "table" then
-				local distance = quest.missing and 1 or 0
+				local distance = quest.missing and 0.9999 or 0
 
 				if not quest.missing then
 					local dx = qpos[1]/100 - pos.x
@@ -1421,7 +1422,8 @@ function addon:PLAYER_ENTERING_WORLD()
 	addon:CheckCalendar()
 end
 
-function addon:QUEST_TURNED_IN(event, questID)
+---@param questID number
+function addon:QUEST_TURNED_IN(_, questID)
 	ns.COMPLETED_QUESTS[questID] = true
 
 	local success, info, checkedNumQuestPOIs = addon:IsDeliveryLocationExpected(questID)
